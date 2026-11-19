@@ -8,6 +8,10 @@ I understand AI sycophancy here as a tendency to accommodate a user's preferred 
 
 The distinction matters because a test score answers a specific question: how often did this implementation agree with this answer key? It cannot by itself establish that every interpretation of Fisher is correct or that the system will generalize. The final interview approach reached 100% on the public sample, but that result needs to be presented with its sample size, selected points and testing conditions. It also needs to survive ordinary changes in wording.
 
+A later review showed that even a perfect public score did not mean the prompt fully represented the book. Directly reading the scanned pages led to adding sales training and active distribution, local labor comparisons, and more precise promotion and compensation criteria. It also exposed a misleading proposed shortcut: missing information about internal candidates must not turn external hiring into an automatic negative verdict. I distinguished an unknown factor from insufficient evidence for an entire point. The student's new local result file again matched all 60 public verdicts, but this checks sample agreement, not the completeness of every judgment or performance on unseen companies.
+
+This review also changed how I assess reassuring statements from an assistant. “Nothing was lost” should be supported by comparing old and new factors, not by repeating that the revision is better. Some wording was deliberately replaced: an overall evidence assessment replaced a blanket negative-evidence veto, and conditional internal-promotion rules replaced a short statement about external hiring. These are interpretive choices to explain openly, rather than label as literal quotations from Fisher.
+
 ## AI psychosis and reinforcing loops
 
 I use “AI psychosis” here as a discussion label for the concern that chatbot interactions can reinforce delusional or paranoid interpretations, rather than as a diagnosis of a person or a claim that AI alone causes illness. The important question for my reflection is how an assistant should respond when a user treats an unsupported belief as established reality.
