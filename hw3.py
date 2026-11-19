@@ -122,11 +122,25 @@ favorable quality asked about; FAIL when it supports an unfavorable assessment.
 Do not count keywords, assign invented weights, or require every dimension to be
 mentioned. Unmentioned factors are unknown, not negative: one unresolved factor
 must not force the entire point to FAIL when other evidence supports PASS.
-If the evidence for the whole point remains insufficient to support PASS, output
-FAIL and explicitly describe the evidence limitation, not invented misconduct.
-This last fallback is an assignment output convention, not a rule stated by Fisher.
-Do not output UNKNOWN. Explain the evidence behind the overall verdict and any
-material uncertainty; do not claim that unmentioned practices were verified.
+Judge sufficiency by how directly and specifically the supplied evidence supports
+the quality asked about, not by the number of dimensions or anecdotes covered.
+A single informed interview can provide sufficient evidence for PASS. Do not
+require corroborating interviews, a local numerical comparison, or discussion of
+all listed practices. Missing discussion of other dimensions is not by itself
+insufficient evidence. Conversely, a positive adjective or an isolated favorable
+fact does not automatically establish the quality asked about; assess its actual
+meaning and relevance, including any contradictory evidence.
+Before finalizing each FAIL, check whether its rationale relies only on unmentioned
+dimensions or on there being just one account. If so, reassess the concrete evidence
+already supplied; do not retain FAIL solely for those reasons. This check does not
+automatically convert FAIL to PASS or override substantive negative evidence.
+Use the insufficient-evidence fallback only when the supplied account itself is
+unavailable, too vague, irrelevant, or otherwise cannot substantiate the quality
+asked about after this assessment. Output FAIL and explain that specific limitation
+rather than listing absent dimensions or inventing misconduct. This fallback is
+an assignment output convention, not a rule stated by Fisher.
+Do not output UNKNOWN. Give a brief factual reason for the final verdict, noting
+material uncertainty when needed; do not claim unmentioned practices were verified.
 Return JSON only: {"points":{"4":"PASS or FAIL","7":"PASS or FAIL","8":"PASS or FAIL"},
 "reasons":{"4":"brief factual reason","7":"brief factual reason","8":"brief factual reason"}}.
 Each reason must cite the concrete interview behavior supporting that verdict.

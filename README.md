@@ -215,9 +215,14 @@ The workflow plans three interviews per company and invokes the provided LangCha
 
 ### Public results
 
-On 19 November 2026, the student ran the expanded Fisher prompt locally and supplied the resulting results.csv. Rechecking all 60 verdicts against public_test/ground_truth.json confirmed **60/60 correct and 100.0% balanced accuracy**, with all 20 companies present, three interviews per company, no missing verdicts and an explanatory summary for every company. The CSV does not record elapsed time or a source-code hash, so no runtime is attributed to this new run; its association with the expanded prompt follows the student's reported execution. This is a public-sample result, not a private-test guarantee.
+On 19 November 2026, I tested the final evidence-sufficiency revision locally in two batches of three and six runs. **All nine runs scored 60/60 with 100.0% balanced accuracy**, giving a mean balanced accuracy of **100.0%**. Each saved CSV contained all 20 companies, three interviews per company and no missing or incorrect verdicts. I checked the saved verdicts against public_test/ground_truth.json; these are repeated evaluations of the same 20 companies, not 180 distinct companies. The logs do not record elapsed time, so I do not assign a runtime to these nine runs. Public-test stability does not guarantee private-test accuracy.
 
-An earlier version was separately cloned from the published GitHub fork and ran successfully in 12.5 seconds. That timing and fresh-clone check belong to the earlier version, not this expanded prompt.
+| Batch | Runs | Correct verdicts per run | Balanced accuracy per run |
+| --- | --- | --- | --- |
+| Initial local checks | 1–3 | 60/60, 60/60, 60/60 | 100%, 100%, 100% |
+| Additional local checks | 4–9 | 60/60 in all six runs | 100% in all six runs |
+
+The per-point breakdown below applies to every one of the nine runs.
 
 | Point | Correct / total | True PASS correctly identified | True FAIL correctly identified |
 | --- | --- | --- | --- |
@@ -235,6 +240,8 @@ Earlier development considered points 1, 2 and 5. The model struggled to disting
 The expanded prompt retains the earlier evidence dimensions: sales knowledge, advice, proactive service and problem solving; fair treatment, morale, retention and grievance handling; executive trust, cooperation, fair advancement and compensation. Examples such as merely sending price lists, persistent low morale, unresolved grievances and refusal to communicate remain covered by these dimensions rather than becoming keyword triggers. Product success alone still does not establish sales excellence; overtime and mixed evidence still require context; unmentioned factors remain unknown.
 
 The revision adds Fisher's discussion of active distribution, personnel selection and continuing training, local labor comparisons, management's responsibility toward workers, regular executive salary reviews and preference for capable internal candidates. The earlier shorthand about external recruitment is replaced with its explicit conditions. The earlier phrase requiring no unresolved serious negative evidence is replaced by an overall assessment of severity, persistence, context and resolution; serious adverse evidence remains relevant, without turning an isolated factor into an automatic veto. No factor is assigned an invented weight or mandatory tier. Unknown evidence about one factor is distinguished from insufficient evidence for an entire point.
+
+The expanded prompt initially left evidence sufficiency too open to interpretation. In three fresh-clone runs of commit ab816dd, I observed 57/60, 60/60 and 60/60 (mean balanced accuracy about 98.8%). In the first run, juniper_industries was incorrectly marked FAIL on all three points despite positive interviews: the model treated missing discussion of other dimensions as insufficient evidence. The final revision retains all Fisher dimensions but judges evidence by specificity and relevance rather than breadth of coverage. A single informed account can suffice; it is not automatically sufficient merely because it sounds positive. Before issuing FAIL, the model checks whether its rationale rests only on omitted dimensions or having a single account and reassesses the supplied facts. This is a prompt-level check within the same model call, not another interview or a hard-coded verdict override. The nine subsequent local runs above had no disagreements.
 
 ### Reproduction and reference
 
