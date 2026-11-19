@@ -215,14 +215,15 @@ The workflow plans three interviews per company and invokes the provided LangCha
 
 ### Public results
 
-On 19 November 2026, I tested the final evidence-sufficiency revision locally in two batches of three and six runs. **All nine runs scored 60/60 with 100.0% balanced accuracy**, giving a mean balanced accuracy of **100.0%**. Each saved CSV contained all 20 companies, three interviews per company and no missing or incorrect verdicts. I checked the saved verdicts against public_test/ground_truth.json; these are repeated evaluations of the same 20 companies, not 180 distinct companies. The logs do not record elapsed time, so I do not assign a runtime to these nine runs. Public-test stability does not guarantee private-test accuracy.
+On 19–20 November 2026 I ran the final evidence-sufficiency revision twelve times in total: nine times locally and three times from a fresh clone of this published fork. **Every run scored 60/60 with 100.0% balanced accuracy.** Each run covered all 20 companies with three interviews per company, and no run contained a missing or incorrect verdict; I checked every saved set of verdicts against public_test/ground_truth.json. These are repeated evaluations of the same 20 companies, not 720 distinct companies. The three fresh-clone runs took about 21 seconds each. Public-test stability does not guarantee private-test accuracy.
 
 | Batch | Runs | Correct verdicts per run | Balanced accuracy per run |
 | --- | --- | --- | --- |
 | Initial local checks | 1–3 | 60/60, 60/60, 60/60 | 100%, 100%, 100% |
 | Additional local checks | 4–9 | 60/60 in all six runs | 100% in all six runs |
+| Fresh clone of this fork | 10–12 | 60/60, 60/60, 60/60 | 100%, 100%, 100% |
 
-The per-point breakdown below applies to every one of the nine runs.
+The per-point breakdown below applies to every one of the twelve runs.
 
 | Point | Correct / total | True PASS correctly identified | True FAIL correctly identified |
 | --- | --- | --- | --- |
@@ -240,6 +241,8 @@ Earlier development considered points 1, 2 and 5. The model struggled to disting
 The expanded prompt retains the earlier evidence dimensions: sales knowledge, advice, proactive service and problem solving; fair treatment, morale, retention and grievance handling; executive trust, cooperation, fair advancement and compensation. Examples such as merely sending price lists, persistent low morale, unresolved grievances and refusal to communicate remain covered by these dimensions rather than becoming keyword triggers. Product success alone still does not establish sales excellence; overtime and mixed evidence still require context; unmentioned factors remain unknown.
 
 The revision adds Fisher's discussion of active distribution, personnel selection and continuing training, local labor comparisons, management's responsibility toward workers, regular executive salary reviews and preference for capable internal candidates. The earlier shorthand about external recruitment is replaced with its explicit conditions. The earlier phrase requiring no unresolved serious negative evidence is replaced by an overall assessment of severity, persistence, context and resolution; serious adverse evidence remains relevant, without turning an isolated factor into an automatic veto. No factor is assigned an invented weight or mandatory tier. Unknown evidence about one factor is distinguished from insufficient evidence for an entire point.
+
+A final pass removed two wording inconsistencies without changing any rule. Point 4 no longer describes the source as "customer or competitor experience", because the workflow always interviews one customer about `sales_team`; the rule now refers to the informed respondent the workflow supplies. The external-hiring note now says that an unknown internal-candidate situation "does not count either way" instead of calling it unresolved, since `UNKNOWN` is not a permitted output and the word invited it. `.DS_Store` was also added to `.gitignore` so local Finder metadata cannot be committed.
 
 The expanded prompt initially left evidence sufficiency too open to interpretation. In three fresh-clone runs of commit ab816dd, I observed 57/60, 60/60 and 60/60 (mean balanced accuracy about 98.8%). In the first run, juniper_industries was incorrectly marked FAIL on all three points despite positive interviews: the model treated missing discussion of other dimensions as insufficient evidence. The final revision retains all Fisher dimensions but judges evidence by specificity and relevance rather than breadth of coverage. A single informed account can suffice; it is not automatically sufficient merely because it sounds positive. Before issuing FAIL, the model checks whether its rationale rests only on omitted dimensions or having a single account and reassesses the supplied facts. This is a prompt-level check within the same model call, not another interview or a hard-coded verdict override. The nine subsequent local runs above had no disagreements.
 
