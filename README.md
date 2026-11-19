@@ -211,7 +211,7 @@ The workflow plans three interviews per company and invokes the provided LangCha
 
 ### Public results
 
-The recorded pre-submission check on 19 November 2026 used a fresh local Git clone with the submission files copied in and the existing Python environment. It finished in 13.6 seconds with **60/60 correct and 100.0% balanced accuracy**, three interviews per company and no missing verdicts. An initial network-restricted attempt returned connection errors; the successful rerun followed restoration of API access. This is a public-sample result, not a private-test guarantee. The published fork still needs to be cloned and checked after upload.
+On 19 November 2026, the published fork was cloned directly from GitHub into a clean directory and run using the existing Python environment. The run processed all 20 public companies in 12.5 seconds, with **60/60 correct and 100.0% balanced accuracy**, three interviews per company and no missing verdicts. The cloned submission files matched the local files, and results.csv was generated successfully. This is a public-sample result, not a private-test guarantee.
 
 | Point | Correct / total | True PASS correctly identified | True FAIL correctly identified |
 | --- | --- | --- | --- |
