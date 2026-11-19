@@ -170,14 +170,73 @@ for each public company. Grading uses a private set of about 20 unseen
 companies with the same tools and the same answer key rules, but different
 names and wording, and scores your 3 points only.
 
-## Homework 3 solution:
-> to students: this is your report, see the homework description.
+## Homework 3 solution
 
-### My 3 points and rules
-> for each point: why you chose it, your PASS rule in one or two sentences, and the evidence it uses. Quote Fisher where it helps.
+### My three points and rules
+
+I selected points **4, 7 and 8** because the supplied interviews directly describe sales service, employee experience and executive cooperation. These topics also demonstrate Fisher's scuttlebutt approach: asking people with relevant experience. The assignment states that knowledgeable respondents agree, so one appropriate respondent per topic is sufficient in this dataset.
+
+| Point | Why selected and evidence | PASS rule |
+| --- | --- | --- |
+| 4 — Above-average sales organization | Ask a customer about `sales_team`. Fisher emphasizes customer satisfaction, repeat business, capable salespeople and continuing improvement in sales service. | PASS when concrete behavior demonstrates knowledgeable, proactive, effective customer service and no unresolved serious negative evidence is present. Poor product knowledge, merely sending prices or customers seeking competitors' advice supports FAIL. |
+| 7 — Outstanding labor and personnel relations | Ask a current employee about `working_conditions`. Fisher discusses fair treatment, retention, morale, wages and effective grievance handling. | PASS when concrete evidence supports fair treatment, healthy morale, stable retention or responsive grievance handling without unresolved serious problems. Persistent unfairness, low morale, frequent departures or unresolved grievances supports FAIL. |
+| 8 — Outstanding executive relations | Ask a former employee about `top_management`. Fisher emphasizes trust, cooperation, fair advancement and constructive handling of friction. | PASS when executives demonstrate trust, teamwork or constructive conflict resolution without unresolved serious negative evidence. Persistent factional conflict, refusal to communicate or conflict-driven departures supports FAIL. |
+
+The model interprets the meaning of each interview. Unionization alone does not establish poor labor relations, and absence of strikes does not establish good relations. Normal executive disagreements can coexist with good teamwork when they are resolved constructively. External recruitment alone is neutral. Product success alone does not establish sales excellence. Unmentioned factors remain unknown. Mixed evidence is assessed for severity, persistence and resolution. If available evidence cannot establish PASS, the result is FAIL with an explicit evidence limitation.
+
+Only the interview tool is used because Section 3.3 assigns all three selected points to interviews and states that informed respondents agree. Documents and SQL are available but are not required to answer these selected topics; they would not automatically provide independent evidence about interpersonal behavior.
+
+These are operational rules derived from Fisher's discussion. Interviews may omit compensation, promotion policies or training, so a verdict is limited to the supplied evidence. It does not establish every aspect of a real company's organizational quality.
 
 ### Design
-> a visualization of your agent design and one paragraph describing it.
 
-### Results
-> your point score on `public_test`, the companies where your verdicts disagree with the public answers, and why.
+```mermaid
+flowchart TD
+    A[Provided runner loads company tools] --> B[Student workflow selects informed roles]
+    B --> C[Customer: sales_team]
+    B --> D[Current employee: working_conditions]
+    B --> E[Former employee: top_management]
+    C --> F[LangChain ChatDeepSeek: deepseek-v4-flash]
+    D --> F
+    E --> F
+    F --> G[Parse JSON and validate each verdict and reason]
+    G -->|Invalid or missing points| H[Retry missing points once using existing interviews]
+    H --> G
+    G -->|Valid results or retry exhausted| I[Return company verdicts and combined summary]
+    I --> J[Provided runner reads public answer key]
+    J --> K[Write results.csv and calculate balanced accuracy]
+```
+
+The workflow plans three interviews per company and invokes the provided LangChain interview tool with the appropriate role and topic. One model request normally evaluates all three interviews together under the Fisher-based prompt. Up to five companies are processed concurrently. The model returns JSON containing three verdicts and evidence-based reasons; each valid point is retained, and missing or invalid points receive one additional application-level attempt without repeating interviews. API calls have a 60-second request timeout and one client retry. Persistent model failures are recorded in the summary and unresolved points remain missing, which the provided scorer correctly treats as wrong. An outer per-company exception handler also preserves a record for unexpected ordinary errors, so another company can continue. Explicit task cancellation is allowed to propagate. Verdict strings are stripped of surrounding whitespace and normalized to uppercase before validation. The model receives interview evidence and rules; the public answer key is loaded by the provided runner after analysis.
+
+### Public results
+
+The recorded pre-submission check on 19 November 2026 used a fresh local Git clone with the submission files copied in and the existing Python environment. It finished in 13.6 seconds with **60/60 correct and 100.0% balanced accuracy**, three interviews per company and no missing verdicts. An initial network-restricted attempt returned connection errors; the successful rerun followed restoration of API access. This is a public-sample result, not a private-test guarantee. The published fork still needs to be cloned and checked after upload.
+
+| Point | Correct / total | True PASS correctly identified | True FAIL correctly identified |
+| --- | --- | --- | --- |
+| 4 | 20/20 | 14/14 | 6/6 |
+| 7 | 20/20 | 14/14 | 6/6 |
+| 8 | 20/20 | 14/14 | 6/6 |
+| Total | 60/60 | 42/42 | 18/18 |
+
+Balanced accuracy = 0.5 × (42/42 + 18/18) = **100%**. There are **no companies whose final verdicts disagree with the public answers**, so there is no final-run disagreement list to explain.
+
+Earlier development considered points 1, 2 and 5. The model struggled to distinguish future growth potential from historical product sales, and ongoing development from repeated sales of previously launched products. I changed the selected points after reviewing Fisher and the available evidence. Interview topics align more directly with points 4, 7 and 8. The final workflow uses semantic interpretation rather than company-specific answers or exact phrase matching. Public-test success still leaves uncertainty about new wording, mixed evidence and API failures.
+
+### Reproduction and reference
+
+Use Python 3.10 or later and install `requirements.txt` in a virtual environment. Set `DEEPSEEK_API_KEY` in the environment or a local `.env` file. This implementation also accepts the local name `HW3`, which takes precedence if both are present.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 hw3.py --data-folder public_test
+```
+
+The script writes `results.csv` in its working directory. Keep credentials in the environment or ignored `.env` file. All company evidence is accessed through the provided tools. The provided tools, runner and scoring functions retain their original code.
+
+Reference: Philip A. Fisher, *Common Stocks and Uncommon Profits*, Part One, Chapter 3, points 4, 7 and 8, using the supplied edition. The descriptions above are paraphrases, not verbatim quotations.
+
+Task 2 is included in [REFLECTION.md](REFLECTION.md).
